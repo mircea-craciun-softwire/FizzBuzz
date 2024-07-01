@@ -56,6 +56,7 @@ function fizzbuzz(n: number): void {
             texts.push("Bang");
         }
         if(check_bong && i % 11 === 0){
+            texts.splice(0, texts.length);
             texts.push("Bong");
         }
         if(check_fezz && i % 13 === 0){
