@@ -1,0 +1,44 @@
+[
+    {
+        "word": "Fizz",
+        "trigger_numer": 3,
+        "overwrite": false,
+        "reverse": false,
+        "insert_before": "None"
+    },
+    {
+        "word": "Buzz",
+        "trigger_numer": 5,
+        "overwrite": false,
+        "reverse": false,
+        "insert_before": "None"
+    },
+    {
+        "word": "Bang",
+        "trigger_numer": 7,
+        "overwrite": false,
+        "reverse": false,
+        "insert_before": "None"
+    },
+    {
+        "word": "Bong",
+        "trigger_numer": 11,
+        "overwrite": true,
+        "reverse": false,
+        "insert_before": "None"
+    },
+    {
+        "word": "Fezz",
+        "trigger_numer": 13,
+        "overwrite": false,
+        "reverse": false,
+        "insert_before": "B"
+    },
+    {
+        "word": "",
+        "trigger_numer": 17,
+        "overwrite": false,
+        "reverse": true,
+        "insert_before": "None"
+    }
+]

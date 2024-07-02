@@ -1,72 +1,81 @@
 import * as readline from 'readline';
+import * as fs from 'fs';
 
-function introduce_13(list: string[]): void{
+type Rule = {
+    word: string;
+    trigger_numer: number;
+    overwrite: boolean;
+    reverse: boolean;
+    insert_before: string;
+}
+
+function introduce_13(list: string[], word_to_introduce: string, introduce_before: string): void{
     
     let found: boolean;
     for (let i = 0; i < list.length; i++) {
-        if(list[i].startsWith("B")){
-            list.splice(i, 0, "Fezz");
+        if(list[i].startsWith(introduce_before)){
+            list.splice(i, 0, word_to_introduce);
             found = true;
             break;
         }
     }
     if(!found){
-        list.push("Fezz");
+        list.push(word_to_introduce);
     }
 
 }
-// This is our main function
+
 function fizzbuzz(n: number): void {
 
-    let check_fizz: boolean = false, check_buzz: boolean = false,check_bang: boolean = false,check_bong: boolean = false,check_fezz: boolean = false, check_reverse: boolean = false;
+    //parse the rules
+    let all_rules: Rule[];
+
+    all_rules = JSON.parse(fs.readFileSync('fizzbuzz_rules.json', 'utf-8'));
+
+    let rules: Rule[] = [];
+
+    console.log("Activated rules are: ");
 
     for(let i = 0; i < process.argv.length; i++){
-        switch(process.argv[i]){
-            case "Fizz":
-                check_fizz = true;
+        for(let j = 0; j < all_rules.length; j++){
+            if(process.argv[i] === `${all_rules[j].trigger_numer}`){
+                console.log(`Rule ${all_rules[j]}`);
+                rules.push(all_rules[j]);
                 break;
-            case "Buzz":
-                check_buzz = true;
-                break;
-            case "Bang":
-                check_bang = true;
-                break;
-            case "Bong":
-                check_bong = true;
-                break;
-            case "Fezz":
-                check_fezz = true;
-                break;
-            case "Reverse":
-                check_reverse = true;
-                break;
+            }
         }
     }
+
 
     let texts : string[] = [];
     for (let i = 1; i <= n; i++) {
         texts = [];
-        if(check_fizz && i % 3 === 0){
-            texts.push("Fizz");
+
+        let respects_rule: boolean = false;
+
+        for(let j = 0; j < rules.length; j++){
+            if(i % rules[j].trigger_numer === 0){
+                respects_rule = true;
+
+                if(rules[j].overwrite){                    
+                    texts.splice(0, texts.length);
+                }
+
+                if(rules[j].insert_before !== "None"){
+                    introduce_13(texts, rules[j].word,rules[j].insert_before);
+                }else if (rules[j].word != ""){
+                    texts.push(rules[j].word);
+                }
+
+                if(rules[j].reverse){
+                    texts.reverse();
+                }
+
+            }
+
         }
-        if(check_buzz && i % 5 === 0){
-            texts.push("Buzz");
-        }
-        if(check_bang && i % 7 === 0){
-            texts.push("Bang");
-        }
-        if(check_bong && i % 11 === 0){
-            texts.splice(0, texts.length);
-            texts.push("Bong");
-        }
-        if(check_fezz && i % 13 === 0){
-            introduce_13(texts);
-        }
-        if(check_reverse && i % 17 == 0){
-            texts.reverse();
-        }
-        
-        if(texts.length === 0){
+
+        if(!respects_rule || texts.length === 0){
             console.log(i);
         }else{
             let text_actual: string = "";
@@ -77,6 +86,7 @@ function fizzbuzz(n: number): void {
         }
     }
 }
+
 function main(): void{
     const rd_line = readline.createInterface({
         input: process.stdin,
@@ -94,5 +104,6 @@ function main(): void{
         rd_line.close();
      })
 }
-// Now, we run the main function:
+
+
 main();
